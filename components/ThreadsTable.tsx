@@ -19,9 +19,11 @@ type ThreadRow = {
 type SortKey = "company" | "primary_recipient" | "sent_at" | "status";
 
 const statusBadge: Record<ThreadRow["status"], string> = {
-  Replied: "bg-green-100 text-green-800 border-green-200",
-  Bounced: "bg-red-100 text-red-800 border-red-200",
-  "No response": "bg-gray-100 text-gray-700 border-gray-200"
+  Replied:
+    "bg-emerald-500/10 text-emerald-300 border-emerald-500/20",
+  Bounced: "bg-rose-500/10 text-rose-300 border-rose-500/20",
+  "No response":
+    "bg-zinc-700/40 text-zinc-300 border-zinc-600/40"
 };
 
 export function ThreadsTable({ rows }: { rows: ThreadRow[] }) {
@@ -81,13 +83,13 @@ export function ThreadsTable({ rows }: { rows: ThreadRow[] }) {
           type="text"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search company, recipient, subject, reply..."
-          className="flex-1 min-w-[260px] px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Search company, recipient, subject, reply…"
+          className="flex-1 min-w-[260px] px-3 py-2 rounded-md text-sm bg-zinc-900/60 border border-zinc-800 text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/40"
         />
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white"
+          className="px-3 py-2 rounded-md text-sm bg-zinc-900/60 border border-zinc-800 text-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
         >
           <option>All</option>
           <option>Replied</option>
@@ -96,13 +98,13 @@ export function ThreadsTable({ rows }: { rows: ThreadRow[] }) {
         </select>
       </div>
 
-      <div className="text-xs text-gray-500 mb-2">
+      <div className="text-xs text-zinc-500 mb-2">
         Showing {filtered.length} of {rows.length}
       </div>
 
-      <div className="overflow-x-auto border border-gray-200 rounded-lg bg-white">
+      <div className="overflow-x-auto rounded-xl border border-zinc-800/80 bg-zinc-900/40 backdrop-blur">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 text-left">
+          <thead className="bg-zinc-900/60 text-left">
             <tr>
               <Th onClick={() => toggleSort("company")}>
                 Company {sortIcon("company")}
@@ -124,21 +126,26 @@ export function ThreadsTable({ rows }: { rows: ThreadRow[] }) {
             {filtered.map((r) => (
               <tr
                 key={r.thread_id}
-                className="border-t border-gray-100 hover:bg-gray-50"
+                className="border-t border-zinc-800/70 hover:bg-zinc-800/30 transition-colors"
               >
-                <td className="px-3 py-2 font-medium">{r.company ?? "—"}</td>
-                <td className="px-3 py-2">
+                <td className="px-3 py-2 font-medium text-zinc-100">
+                  {r.company ?? "—"}
+                </td>
+                <td className="px-3 py-2 text-zinc-300">
                   <div>{r.primary_recipient ?? "—"}</div>
                   {r.recipients.length > 1 && (
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-zinc-500">
                       +{r.recipients.length - 1} more
                     </div>
                   )}
                 </td>
-                <td className="px-3 py-2 max-w-[260px] truncate" title={r.subject}>
+                <td
+                  className="px-3 py-2 max-w-[260px] truncate text-zinc-300"
+                  title={r.subject}
+                >
                   {r.subject}
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap text-gray-600">
+                <td className="px-3 py-2 whitespace-nowrap text-zinc-400">
                   {new Date(r.sent_at).toLocaleDateString(undefined, {
                     month: "short",
                     day: "numeric",
@@ -155,15 +162,21 @@ export function ThreadsTable({ rows }: { rows: ThreadRow[] }) {
                 <td className="px-3 py-2 max-w-[420px]">
                   {r.status === "Replied" && r.reply_snippet ? (
                     <div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-emerald-300/80">
                         from {r.reply_from}
                       </div>
-                      <div className="truncate" title={r.reply_snippet}>
+                      <div
+                        className="truncate text-zinc-300"
+                        title={r.reply_snippet}
+                      >
                         {r.reply_snippet}
                       </div>
                     </div>
                   ) : (
-                    <div className="truncate text-gray-600" title={r.detail}>
+                    <div
+                      className="truncate text-zinc-400"
+                      title={r.detail}
+                    >
                       {r.detail || "—"}
                     </div>
                   )}
@@ -172,7 +185,10 @@ export function ThreadsTable({ rows }: { rows: ThreadRow[] }) {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-3 py-8 text-center text-gray-400">
+                <td
+                  colSpan={6}
+                  className="px-3 py-8 text-center text-zinc-500"
+                >
                   No threads match these filters.
                 </td>
               </tr>
@@ -194,7 +210,7 @@ function Th({
   return (
     <th
       onClick={onClick}
-      className={`px-3 py-2 font-semibold text-xs uppercase tracking-wide text-gray-600 ${onClick ? "cursor-pointer select-none hover:text-gray-900" : ""}`}
+      className={`px-3 py-2 font-semibold text-[11px] uppercase tracking-wider text-zinc-400 ${onClick ? "cursor-pointer select-none hover:text-zinc-100" : ""}`}
     >
       {children}
     </th>
